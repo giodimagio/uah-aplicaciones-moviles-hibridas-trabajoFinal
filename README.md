@@ -38,7 +38,7 @@
 
 ![Trabajo Final - Enunciado](./documentacion/practica_final_enunciado.pdf)
 
-La práctica inicial consiste en la implementación de la interfaz gráfica de una aplicación desarrollada con el framework Ionic y Vue.js, con el objetivo de que sea completamente responsiva. Para ello se utiliza toda la capacidad de Ionic al diseñar la capa de presentación desde un enfoque mobile-first, utilizando el componente ion-grid, el cual proporciona un sistema de rejillas en filas y columnas, además de breakpoints predefinidos que permiten adaptar el diseño a distintos tamaños de pantalla de forma sencilla.
+La práctica final consiste en el desarrollo de una aplicación que permita dividir el pago de la cuenta de un restaurante entre los comensales, incluyendo una propina opcional utilizando para ello el frameworl Ionic y Vue.js, con el objetivo de que sea completamente responsiva. Para ello se utiliza toda la capacidad de Ionic al diseñar la capa de presentación desde un enfoque mobile-first, utilizando el componente ion-grid, el cual proporciona un sistema de rejillas en filas y columnas, además de breakpoints predefinidos que permiten adaptar el diseño a distintos tamaños de pantalla de forma sencilla.
 
 ### Stack
 
@@ -75,19 +75,19 @@ Previamente, debemos tener instalado lo siguiente:
 
 ### Instalación
 
-1. Clonamos el repositorio desde VSCode con el cliente Git integrado o desde un terminal Bash, vía HTTPS o SSH. [GitHub]([https://github.com/giodimagio/uah-aplicaciones-moviles-hibridas-trabajoInicial.git)
+1. Clonamos el repositorio desde VSCode con el cliente Git integrado o desde un terminal Bash, vía HTTPS o SSH. [GitHub]([https://github.com/giodimagio/uah-aplicaciones-moviles-hibridas-trabajoFinal.git)
 
 	HTTPS
    ```sh
-   git clone git@github.com:giodimagio/uah-aplicaciones-moviles-hibridas-trabajoInicial.git
+   git clone git@github.com:giodimagio/uah-aplicaciones-moviles-hibridas-trabajoFinal.git
    ```
  	SSH
    ```sh
-   git clone https://github.com/giodimagio/uah-aplicaciones-moviles-hibridas-trabajoInicial.git
+   git clone https://github.com/giodimagio/uah-aplicaciones-moviles-hibridas-trabajoFinal.git
    ```
 2. Nos movemos a la carpeta del proyecto
    ```sh
-   cd uah-aplicaciones-moviles-hibridas-trabajoInicial
+   cd uah-aplicaciones-moviles-hibridas-trabajoFinal
    ```
 3. Seguimos la secuencia de comandos del archivo ![commands.sh](./commands.sh)
 
