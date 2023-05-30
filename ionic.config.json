@@ -1,0 +1,7 @@
+{
+  "name": "uah-aplicaciones-moviles-hibridas-trabajoFinal",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
