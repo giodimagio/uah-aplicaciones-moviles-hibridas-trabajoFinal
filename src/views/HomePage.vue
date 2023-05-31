@@ -2,55 +2,82 @@
   <ion-page>
     <ion-header :translucent="true">
       <ion-toolbar>
-        <ion-title>Blank</ion-title>
+        <ion-title class="ion-text-center">Dividimos?</ion-title>
       </ion-toolbar>
     </ion-header>
-
     <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Blank</ion-title>
-        </ion-toolbar>
-      </ion-header>
-
-      <div id="container">
-        <strong>Ready to create an app?</strong>
-        <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-      </div>
+      <ion-grid>
+        <ion-row class="ion-justify-content-center">
+          <ion-col size-xs=10 size-sm=5>
+            <ion-input :clear-input="true" error-text="Importe incorrecto. Introduce uno válido" fill="outline"
+              helper-text="*Importe total de la cuenta" inputmode="numeric" label="Importe" label-placement="stacked"
+              placeholder="Introduce un importe válido" :required="true" type="number">
+            </ion-input>
+          </ion-col>
+          <ion-col size-xs=10 size-sm=5>
+            <ion-input :clear-input="true" error-text="Nº comensales incorrecto. Introduce uno válido" fill="outline"
+              helper-text="*Número de personas a pagar la cuenta" inputmode="numeric" label="Nº Comensales"
+              label-placement="stacked" placeholder="Introduce un número de personas válido" :required="true"
+              type="number">
+            </ion-input>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col class="ion-text-center">
+            <p>¿Quieres dejar propina?</p>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-radio-group class="ion-justify-text-center">
+              <ion-row class="ion-justify-content-center">
+                <ion-col size-xs=10 size-sm=3>
+                  <ion-item>
+                    <ion-radio color="danger" justify="start" label-placement="end" value="0">0 %</ion-radio>
+                  </ion-item>
+                </ion-col>
+                <ion-col size-xs=10 size-sm=3>
+                  <ion-item>
+                    <ion-radio color="warning" justify="start" label-placement="end" value="10">10 %</ion-radio>
+                  </ion-item>
+                </ion-col>
+                <ion-col size-xs=10 size-sm=3>
+                  <ion-item>
+                    <ion-radio color="success" justify="start" label-placement="end" value="20">20 %</ion-radio>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+            </ion-radio-group>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </ion-content>
+    <ion-footer>
+      <ion-toolbar>
+        <ion-title class="ion-text-center">Ionic - Trabajo Final - Aplicaciones móviles (Híbridas) - UAH</ion-title>
+      </ion-toolbar>
+      <ion-toolbar>
+        <ion-title class="ion-text-center">Jorge Romero - jorge.romeroc@edu.uah.es</ion-title>
+      </ion-toolbar>
+    </ion-footer>
   </ion-page>
 </template>
 
 <script setup lang="ts">
+import { IonIcon } from '@ionic/vue';
+import { IonInput } from '@ionic/vue';
+import { IonRadio, IonRadioGroup, IonItem } from '@ionic/vue';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
+import { IonGrid, IonCol, IonRow } from '@ionic/vue';
+import { IonFooter } from '@ionic/vue';
+// import InputComponent from '@/views/InputComponent.vue';
 </script>
 
 <style scoped>
-#container {
-  text-align: center;
-  
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
-}
-
-#container p {
-  font-size: 16px;
-  line-height: 22px;
-  
-  color: #8c8c8c;
-  
+h1,
+h3 {
   margin: 0;
-}
-
-#container a {
-  text-decoration: none;
+  padding: 10px;
+  color: #8c8c8c;
 }
 </style>
