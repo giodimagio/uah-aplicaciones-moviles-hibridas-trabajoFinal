@@ -33,32 +33,31 @@
               <ion-row class="ion-justify-content-center">
                 <ion-col size-xs="12" size-sm="4">
                   <ion-item>
-                    <ion-radio name="opcion1" color="danger" justify="start" label-placement="end" value="0">0
-                      %</ion-radio>
+                    <ion-radio id="radioButton1" color="danger" justify="start" label-placement="end"
+                      :value="radioButton1Value">{{ radioButton1Value }} %</ion-radio>
                     <ion-icon :icon="sadOutline" size="large"></ion-icon>
                   </ion-item>
                 </ion-col>
                 <ion-col size-xs="12" size-sm="4">
                   <ion-item>
-                    <ion-radio name="opcion2" color="warning" justify="start" label-placement="end" value="10">10
-                      %</ion-radio>
+                    <ion-radio id="radioButton2" color="warning" justify="start" label-placement="end"
+                      :value="radioButton2Value">{{ radioButton2Value }} %</ion-radio>
                     <ion-icon :icon="happySharp" size="large"></ion-icon>
                   </ion-item>
                 </ion-col>
                 <ion-col size-xs="12" size-sm="4">
                   <ion-item>
-                    <ion-radio name="opcion3" color="success" justify="start" label-placement="end" value="20">20
-                      %</ion-radio>
+                    <ion-radio id="radioButton3" color="success" justify="start" label-placement="end"
+                      :value="radioButton3Value">{{ radioButton3Value }} %</ion-radio>
                     <ion-icon :icon="happyOutline" size="large"></ion-icon>
                   </ion-item>
                 </ion-col>
                 <ion-col size-xs="12" size-sm="6">
                   <ion-item>
-                    <ion-radio name="opcion4" color="dark" justify="start" label-placement="end" value="opcion4">{{
-                      rangeValue }}
-                      %</ion-radio>
+                    <ion-radio id="radioButton4" color="dark" justify="start" label-placement="end"
+                      v-model="rangeValue">{{ rangeValue }} %</ion-radio>
                   </ion-item>
-                  <ion-range label-placement="start" :pin="true" v-model="rangeValue">
+                  <ion-range id="rangeButton1" label-placement="start" :pin="true" v-model="rangeValue">
                     <div slot="label">Otro importe</div>
                   </ion-range>
                 </ion-col>
@@ -90,12 +89,16 @@ import { IonGrid, IonCol, IonRow } from '@ionic/vue';
 import { IonFooter } from '@ionic/vue';
 import { ref, watch } from 'vue';
 
-const selectedOption = ref<string | null>(null);
+const radioButton1Value = "0";
+const radioButton2Value = "10";
+const radioButton3Value = "20";
+
+const selectedOption = ref<number | null>(null);
 const rangeValue = ref(0);
 
-watch(rangeValue, (changedValue) => {
-  selectedOption.value = 'opcion4';
-  console.log("rangeValue: " + rangeValue + "changedValue: " + changedValue + " | selectedOption.value: " + selectedOption.value);
+watch(rangeValue, () => {
+  selectedOption.value = rangeValue.value;
+  console.log("rangeValue: " + rangeValue.value + " | selectedOption.value: " + selectedOption.value);
 });
 </script>
 
