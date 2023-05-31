@@ -8,13 +8,13 @@
     <ion-content :fullscreen="true">
       <ion-grid>
         <ion-row class="ion-justify-content-center">
-          <ion-col size-xs=10 size-sm=5 class="ion-margin-top">
+          <ion-col size-xs="10" size-sm="5" class="ion-margin-top">
             <ion-input :clear-input="true" error-text="Importe incorrecto. Introduce uno válido" fill="outline"
               helper-text="*Importe total de la cuenta" inputmode="numeric" label="Importe" label-placement="stacked"
               placeholder="Introduce un importe válido" :required="true" type="number">
             </ion-input>
           </ion-col>
-          <ion-col size-xs=10 size-sm=5 class="ion-margin-top">
+          <ion-col size-xs="10" size-sm="5" class="ion-margin-top">
             <ion-input :clear-input="true" error-text="Nº comensales incorrecto. Introduce uno válido" fill="outline"
               helper-text="*Número de personas a pagar la cuenta" inputmode="numeric" label="Nº Comensales"
               label-placement="stacked" placeholder="Introduce un número de personas válido" :required="true"
@@ -28,32 +28,39 @@
           </ion-col>
         </ion-row>
         <ion-row>
-          <ion-col size=10 offset=1>
-            <ion-radio-group class="ion-justify-text-center">
+          <ion-col size="10" offset="1">
+            <ion-radio-group v-model="selectedOption" class="ion-justify-text-center">
               <ion-row class="ion-justify-content-center">
-                <ion-col size-xs=12 size-sm=4>
+                <ion-col size-xs="12" size-sm="4">
                   <ion-item>
-                    <ion-radio color="danger" justify="start" label-placement="end" value="0">0 %</ion-radio>
+                    <ion-radio name="opcion1" color="danger" justify="start" label-placement="end" value="0">0
+                      %</ion-radio>
                     <ion-icon :icon="sadOutline" size="large"></ion-icon>
                   </ion-item>
                 </ion-col>
-                <ion-col size-xs=12 size-sm=4>
+                <ion-col size-xs="12" size-sm="4">
                   <ion-item>
-                    <ion-radio color="warning" justify="start" label-placement="end" value="10">10 %</ion-radio>
+                    <ion-radio name="opcion2" color="warning" justify="start" label-placement="end" value="10">10
+                      %</ion-radio>
                     <ion-icon :icon="happySharp" size="large"></ion-icon>
                   </ion-item>
                 </ion-col>
-                <ion-col size-xs=12 size-sm=4>
+                <ion-col size-xs="12" size-sm="4">
                   <ion-item>
-                    <ion-radio color="success" justify="start" label-placement="end" value="20">20 %</ion-radio>
+                    <ion-radio name="opcion3" color="success" justify="start" label-placement="end" value="20">20
+                      %</ion-radio>
                     <ion-icon :icon="happyOutline" size="large"></ion-icon>
                   </ion-item>
                 </ion-col>
-                <ion-col size-xs=12 size-sm=6>
+                <ion-col size-xs="12" size-sm="6">
                   <ion-item>
-                    <ion-radio color="dark" justify="start" label-placement="end">x %</ion-radio>
+                    <ion-radio name="opcion4" color="dark" justify="start" label-placement="end" value="opcion4">{{
+                      rangeValue }}
+                      %</ion-radio>
                   </ion-item>
-                  <ion-range :pin="true" :pin-formatter="pinFormatter" @ionChange="onIonChange"></ion-range>
+                  <ion-range label-placement="start" :pin="true" v-model="rangeValue">
+                    <div slot="label">Otro importe</div>
+                  </ion-range>
                 </ion-col>
               </ion-row>
             </ion-radio-group>
@@ -81,12 +88,15 @@ import { IonRange, IonLabel } from '@ionic/vue';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
 import { IonGrid, IonCol, IonRow } from '@ionic/vue';
 import { IonFooter } from '@ionic/vue';
-// import InputComponent from '@/views/InputComponent.vue';
+import { ref, watch } from 'vue';
 
-const pinFormatter = (value: number) => `${value}%`;
+const selectedOption = ref<string | null>(null);
+const rangeValue = ref(0);
 
-const onIonChange = (event: CustomEvent) => { };
-
+watch(rangeValue, (changedValue) => {
+  selectedOption.value = 'opcion4';
+  console.log("rangeValue: " + rangeValue + "changedValue: " + changedValue + " | selectedOption.value: " + selectedOption.value);
+});
 </script>
 
 <style scoped>
