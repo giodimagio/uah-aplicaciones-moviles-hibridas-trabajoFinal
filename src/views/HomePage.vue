@@ -12,14 +12,14 @@
             <ion-input :clear-input="true" error-text="Importe incorrecto. Introduce uno válido" fill="outline"
               helper-text="*Importe total de la cuenta" inputmode="decimal" label="Importe" label-placement="stacked"
               pattern="^\d+(\.\d{1,2})?$" pattern-error-text="Importe incorrecto. Introduce uno válido"
-              placeholder="Introduce un importe válido" type="number" :required="true" v-model="importeTotal">
+              placeholder="Introduce un importe válido" type="number" :required="true" v-model="importeCuenta">
             </ion-input>
           </ion-col>
           <ion-col size-xs="10" size-sm="5" class="ion-margin-top">
             <ion-input :clear-input="true" error-text="Nº comensales incorrecto. Introduce uno válido" fill="outline"
               helper-text="*Número de personas a pagar la cuenta" inputmode="numeric" label="Nº Comensales"
               label-placement="stacked" placeholder="Introduce un número de personas válido" :required="true"
-              type="number">
+              type="number" v-model="comensales">
             </ion-input>
           </ion-col>
         </ion-row>
@@ -71,18 +71,18 @@
             <ion-row>
               <ion-col size-xs="12" size-md="4">
                 <ion-item>
-                  <h3><ion-text color="danger">Propina</ion-text>: {{ importeTotal * (parseInt(selectedOption) / 100) }} €
+                  <h3><ion-text color="danger">Propina</ion-text>: {{ propina.toFixed(2) }} €
                   </h3>
                 </ion-item>
               </ion-col>
               <ion-col size-xs="12" size-md="4">
                 <ion-item>
-                  <h3><ion-text color="danger">Por persona</ion-text>: {{ }} €</h3>
+                  <h3><ion-text color="danger">Por persona</ion-text>: {{ importePersona.toFixed(2) }} €</h3>
                 </ion-item>
               </ion-col>
               <ion-col size-xs="12" size-md="4">
                 <ion-item>
-                  <h3><ion-text color="danger">Total</ion-text>: {{ importeTotal * (1 + (rangeValue / 100)) }} €</h3>
+                  <h3><ion-text color="danger">Total</ion-text>: {{ importeTotal.toFixed(2) }} €</h3>
                 </ion-item>
               </ion-col>
             </ion-row>
@@ -111,9 +111,10 @@ import { IonRange, IonLabel } from '@ionic/vue';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
 import { IonGrid, IonCol, IonRow } from '@ionic/vue';
 import { IonFooter } from '@ionic/vue';
-import { ref, watch } from 'vue';
+import { ref, watch, computed } from 'vue';
 
-const importeTotal = ref(0);
+let importeCuenta = ref(0);
+let comensales = ref(1);
 
 const radioButton1Value = "0";
 const radioButton2Value = "10";
@@ -122,9 +123,38 @@ const radioButton3Value = "20";
 const selectedOption = ref<number | null>(null);
 const rangeValue = ref(0);
 
+const propina = computed(() => {
+  if (selectedOption.value === null) {
+    return 0;
+  } else if (typeof selectedOption.value === 'number') {
+    return (importeCuenta.value * (selectedOption.value / 100));
+  } else {
+    return (importeCuenta.value * (parseInt(selectedOption.value) / 100));
+  }
+});
+
+const importePersona = computed(() => {
+  if (comensales.value === null || 0) {
+    return 0;
+  } else if (typeof importeCuenta.value === 'number') {
+    return ((importeCuenta.value + propina.value) / comensales.value);
+  } else {
+    return ((parseInt(importeCuenta.value) + propina.value) / comensales.value);
+  }
+});
+
+const importeTotal = computed(() => {
+  if (importeCuenta.value === null || 0) {
+    return 0;
+  } else if (typeof importeCuenta.value === 'number') {
+    return (importeCuenta.value + propina.value);
+  } else {
+    return (parseInt(importeCuenta.value) + propina.value);
+  }
+});
+
 watch(rangeValue, () => {
   selectedOption.value = rangeValue.value;
-  console.log("rangeValue: " + rangeValue.value + " | selectedOption.value: " + selectedOption.value);
 });
 </script>
 
