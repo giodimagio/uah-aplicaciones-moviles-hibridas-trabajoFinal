@@ -10,8 +10,9 @@
         <ion-row class="ion-justify-content-center">
           <ion-col size-xs="10" size-sm="5" class="ion-margin-top">
             <ion-input :clear-input="true" error-text="Importe incorrecto. Introduce uno válido" fill="outline"
-              helper-text="*Importe total de la cuenta" inputmode="numeric" label="Importe" label-placement="stacked"
-              placeholder="Introduce un importe válido" :required="true" type="number">
+              helper-text="*Importe total de la cuenta" inputmode="decimal" label="Importe" label-placement="stacked"
+              pattern="^\d+(\.\d{1,2})?$" pattern-error-text="Importe incorrecto. Introduce uno válido"
+              placeholder="Introduce un importe válido" type="number" :required="true" v-model="importeTotal">
             </ion-input>
           </ion-col>
           <ion-col size-xs="10" size-sm="5" class="ion-margin-top">
@@ -65,6 +66,28 @@
             </ion-radio-group>
           </ion-col>
         </ion-row>
+        <ion-row>
+          <ion-col size="10" offset="1">
+            <ion-row>
+              <ion-col size-xs="12" size-md="4">
+                <ion-item>
+                  <h3><ion-text color="danger">Propina</ion-text>: {{ importeTotal * (parseInt(selectedOption) / 100) }} €
+                  </h3>
+                </ion-item>
+              </ion-col>
+              <ion-col size-xs="12" size-md="4">
+                <ion-item>
+                  <h3><ion-text color="danger">Por persona</ion-text>: {{ }} €</h3>
+                </ion-item>
+              </ion-col>
+              <ion-col size-xs="12" size-md="4">
+                <ion-item>
+                  <h3><ion-text color="danger">Total</ion-text>: {{ importeTotal * (1 + (rangeValue / 100)) }} €</h3>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+          </ion-col>
+        </ion-row>
       </ion-grid>
     </ion-content>
     <ion-footer>
@@ -80,6 +103,7 @@
 
 <script setup lang="ts">
 import { IonIcon } from '@ionic/vue';
+import { IonText } from '@ionic/vue';
 import { happyOutline, happySharp, sadOutline } from 'ionicons/icons';
 import { IonInput } from '@ionic/vue';
 import { IonRadio, IonRadioGroup, IonItem } from '@ionic/vue';
@@ -88,6 +112,8 @@ import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue
 import { IonGrid, IonCol, IonRow } from '@ionic/vue';
 import { IonFooter } from '@ionic/vue';
 import { ref, watch } from 'vue';
+
+const importeTotal = ref(0);
 
 const radioButton1Value = "0";
 const radioButton2Value = "10";
