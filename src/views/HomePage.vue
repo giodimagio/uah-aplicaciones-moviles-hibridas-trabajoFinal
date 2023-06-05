@@ -30,7 +30,7 @@
         </ion-row>
         <ion-row>
           <ion-col size="10" offset="1">
-            <ion-radio-group v-model="selectedOption" class="ion-justify-text-center">
+            <ion-radio-group v-model="opcionSeleccionada" class="ion-justify-text-center">
               <ion-row class="ion-justify-content-center">
                 <ion-col size-xs="12" size-sm="4">
                   <ion-item>
@@ -56,9 +56,9 @@
                 <ion-col size-xs="12" size-sm="6">
                   <ion-item>
                     <ion-radio id="radioButton4" color="dark" justify="start" label-placement="end"
-                      v-model="rangeValue">{{ rangeValue }} %</ion-radio>
+                      v-model="rangoSeleccionadoValue">{{ rangoSeleccionadoValue }} %</ion-radio>
                   </ion-item>
-                  <ion-range id="rangeButton1" label-placement="start" :pin="true" v-model="rangeValue">
+                  <ion-range id="rangeButton1" label-placement="start" :pin="true" v-model="rangoSeleccionadoValue">
                     <div slot="label">Otro importe</div>
                   </ion-range>
                 </ion-col>
@@ -107,29 +107,29 @@ import { IonText } from '@ionic/vue';
 import { happyOutline, happySharp, sadOutline } from 'ionicons/icons';
 import { IonInput } from '@ionic/vue';
 import { IonRadio, IonRadioGroup, IonItem } from '@ionic/vue';
-import { IonRange, IonLabel } from '@ionic/vue';
+import { IonRange } from '@ionic/vue';
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
 import { IonGrid, IonCol, IonRow } from '@ionic/vue';
 import { IonFooter } from '@ionic/vue';
 import { ref, watch, computed } from 'vue';
 
-let importeCuenta = ref(0);
-let comensales = ref(1);
+const importeCuenta = ref(0);
+const comensales = ref(1);
 
 const radioButton1Value = "0";
 const radioButton2Value = "10";
 const radioButton3Value = "20";
 
-const selectedOption = ref<number | null>(null);
-const rangeValue = ref(0);
+const opcionSeleccionada = ref<number | null>(null);
+const rangoSeleccionadoValue = ref(0);
 
 const propina = computed(() => {
-  if (selectedOption.value === null) {
+  if (opcionSeleccionada.value === null) {
     return 0;
-  } else if (typeof selectedOption.value === 'number') {
-    return (importeCuenta.value * (selectedOption.value / 100));
+  } else if (typeof opcionSeleccionada.value === 'number') {
+    return (importeCuenta.value * (opcionSeleccionada.value / 100));
   } else {
-    return (importeCuenta.value * (parseInt(selectedOption.value) / 100));
+    return (importeCuenta.value * (parseInt(opcionSeleccionada.value) / 100));
   }
 });
 
@@ -153,8 +153,8 @@ const importeTotal = computed(() => {
   }
 });
 
-watch(rangeValue, () => {
-  selectedOption.value = rangeValue.value;
+watch(rangoSeleccionadoValue, () => {
+  opcionSeleccionada.value = rangoSeleccionadoValue.value;
 });
 </script>
 
