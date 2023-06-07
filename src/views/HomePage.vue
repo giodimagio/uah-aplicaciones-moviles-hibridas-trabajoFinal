@@ -2,7 +2,7 @@
   <ion-page>
     <ion-header :translucent="true">
       <ion-toolbar>
-        <ion-title class="ion-text-center">Dividimos?</ion-title>
+        <ion-title class="ion-text-center">¿Dividimos?</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true">
@@ -74,8 +74,7 @@
             <ion-row>
               <ion-col size-xs="12" size-md="4">
                 <ion-item>
-                  <h3><ion-text color="danger">Propina</ion-text>: {{ propina.toFixed(2) }} €
-                  </h3>
+                  <h3><ion-text color="danger">Propina</ion-text>: {{ propina.toFixed(2) }} €</h3>
                 </ion-item>
               </ion-col>
               <ion-col size-xs="12" size-md="4">
@@ -108,31 +107,29 @@
 import { IonCol, IonContent, IonFooter, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonPage, IonRadio, IonRadioGroup, IonRange, IonRow, IonText, IonTitle, IonToolbar, } from '@ionic/vue';
 import { IonInputCustomEvent, InputInputEventDetail } from '@ionic/core';
 import { happyOutline, happySharp, sadOutline } from 'ionicons/icons';
-import { ref, watch, computed } from 'vue';
+import { Ref, ref, watch, computed } from 'vue';
 
 // Variables
-const importeCuenta = ref<number>(NaN);
-const comensales = ref<number>(1);
-const opcionSeleccionada = ref<number | null>(null);
-const rangoSeleccionadoValue = ref<number>(25);
+const importeCuenta: Ref<number> = ref(NaN);
+const comensales: Ref<number> = ref(1);
+const opcionSeleccionada: Ref<number | null> = ref(null);
+const rangoSeleccionadoValue: Ref<number> = ref(25);
 const regexImporte: RegExp = /^(?!0\d)\d+(\.\d{1,2})?$/;
 const regexComensales: RegExp = /^[1-9]\d*$/;
 
-const radioButton1Value = "0";
-const radioButton2Value = "10";
-const radioButton3Value = "20";
+const radioButton1Value: string = "0";
+const radioButton2Value: string = "10";
+const radioButton3Value: string = "20";
 
 // Gestión de eventos
-const manejarImporteInput = (event: IonInputCustomEvent<InputInputEventDetail>) => {
+const manejarImporteInput = (event: IonInputCustomEvent<InputInputEventDetail>): void => {
 
   const valorImporteInput = parseFloat(event.detail.value || '');
   importeCuenta.value = isNaN(valorImporteInput) ? 0 : valorImporteInput;
 
-  // Remove error classes
   event.target.classList.remove("ion-valid");
   event.target.classList.remove("ion-invalid");
 
-  // Check if the value matches the pattern
   if (!regexImporte.test(valorImporteInput.toString())) {
     event.target.classList.add("ion-invalid");
     console.log("Input: " + valorImporteInput.toString() + " es un importe INVÁLIDO");
@@ -144,61 +141,60 @@ const manejarImporteInput = (event: IonInputCustomEvent<InputInputEventDetail>) 
   console.log("Evento Input: importeCuenta = " + importeCuenta.value);
 }
 
-const manejarComensalesInput = (event: IonInputCustomEvent<InputInputEventDetail>) => {
+const manejarComensalesInput = (event: IonInputCustomEvent<InputInputEventDetail>): void => {
 
-  const valorComensalesInput = parseInt(event.detail.value || '', 10);
+  const valorComensalesInput = parseFloat(event.detail.value || '');
   comensales.value = isNaN(valorComensalesInput) ? 0 : valorComensalesInput;
 
-  // Remove error classes
   event.target.classList.remove("ion-valid");
   event.target.classList.remove("ion-invalid");
 
-  // Check if the value matches the pattern
   if (!regexComensales.test(valorComensalesInput.toString())) {
     event.target.classList.add("ion-invalid");
-    console.log("Input comensales es INVALIDO");
+    console.log("Input: " + valorComensalesInput.toString() + " es un importe INVÁLIDO");
   } else {
     event.target.classList.add("ion-valid");
-    console.log("Input comensales es VALIDO");
+    console.log("Input: " + valorComensalesInput.toString() + " es un importe VÁLIDO");
   }
 
   console.log("Evento Input: comensales = " + comensales.value);
 }
 
-const manejarBlur = (event: IonInputCustomEvent<FocusEvent>) => {
+const manejarBlur = (event: IonInputCustomEvent<FocusEvent>): void => {
   event.target.classList.add("ion-touched");
-  console.log("Blur event");
+  console.log("Evento volver del foco");
 };
 
 // Propiedades computadas
 const propina = computed(() => {
-  if (opcionSeleccionada.value === null || undefined) {
-    return 0;
-  } else if (typeof opcionSeleccionada.value === "number") {
+  if (typeof opcionSeleccionada.value === "number") {
     return (importeCuenta.value * (opcionSeleccionada.value / 100));
+  } else if (typeof opcionSeleccionada.value === "string" && !isNaN(importeCuenta.value)) {
+    return (importeCuenta.value * (parseFloat(opcionSeleccionada.value) / 100));
   } else {
-    return (importeCuenta.value * (parseInt(opcionSeleccionada.value) / 100));
+    return 0;
   }
 });
 
 const importePersona = computed(() => {
-  if (isNaN(comensales.value)) {
-    return 1;
+  if (isNaN(importeCuenta.value) || isNaN(comensales.value)) {
+    return 0;
   } else if (typeof importeCuenta.value === "number") {
     return ((importeCuenta.value + propina.value) / comensales.value);
+  } else if (typeof importeCuenta.value === "string") {
+    return ((parseFloat(importeCuenta.value) + propina.value) / comensales.value);
   } else {
-    return ((parseInt(importeCuenta.value) + propina.value) / comensales.value);
+    return 0;
   }
 });
 
 const importeTotal = computed(() => {
-  //if (importeCuenta.value === null || 0 || NaN || undefined) {
   if (isNaN(importeCuenta.value)) {
     return 0;
   } else if (typeof importeCuenta.value === "number") {
     return (importeCuenta.value + propina.value);
   } else {
-    return (parseInt(importeCuenta.value) + propina.value);
+    return (parseFloat(importeCuenta.value) + propina.value);
   }
 });
 
