@@ -9,14 +9,16 @@
       <ion-grid>
         <ion-row class="ion-justify-content-center">
           <ion-col size-xs="10" size-sm="5" class="ion-margin-top">
-            <ion-input :clear-input="true" error-text="Importe incorrecto. Introduce uno válido" fill="outline"
-              helper-text="*Importe total de la cuenta" inputmode="decimal" label="Importe" label-placement="stacked"
-              pattern="^\d+(\.\d{1,2})?$" pattern-error-text="Importe incorrecto. Introduce uno válido"
-              placeholder="Introduce un importe válido" type="number" :required="true" v-model="importeCuenta">
+            <ion-input ref="inputImporte" :clear-input="true" error-text="Importe incorrecto. Introduce uno válido"
+              fill="outline" helper-text="*Importe total de la cuenta" inputmode="decimal" label="Importe"
+              label-placement="stacked" pattern="^\d+(\.\d{1,2})?$"
+              pattern-error-text="Importe incorrecto. Introduce uno válido" placeholder="Introduce un importe válido"
+              type="number" :required="true" :value="importeCuenta" @ionInput="manejarInput">
             </ion-input>
           </ion-col>
           <ion-col size-xs="10" size-sm="5" class="ion-margin-top">
-            <ion-input :clear-input="true" error-text="Nº comensales incorrecto. Introduce uno válido" fill="outline"
+            <ion-input ref="inputComensales" :clear-input="true"
+              error-text="Nº comensales incorrecto. Introduce uno válido" fill="outline"
               helper-text="*Número de personas a pagar la cuenta" inputmode="numeric" label="Nº Comensales"
               label-placement="stacked" placeholder="Introduce un número de personas válido" :required="true"
               type="number" v-model="comensales">
@@ -102,27 +104,31 @@
 </template>
 
 <script setup lang="ts">
-import { IonIcon } from '@ionic/vue';
-import { IonText } from '@ionic/vue';
+import { IonCol, IonContent, IonFooter, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonPage, IonRadio, IonRadioGroup, IonRange, IonRow, IonText, IonTitle, IonToolbar, } from '@ionic/vue';
+import { IonInputCustomEvent, InputInputEventDetail } from '@ionic/core';
 import { happyOutline, happySharp, sadOutline } from 'ionicons/icons';
-import { IonInput } from '@ionic/vue';
-import { IonRadio, IonRadioGroup, IonItem } from '@ionic/vue';
-import { IonRange } from '@ionic/vue';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
-import { IonGrid, IonCol, IonRow } from '@ionic/vue';
-import { IonFooter } from '@ionic/vue';
 import { ref, watch, computed } from 'vue';
 
-const importeCuenta = ref(0);
-const comensales = ref(1);
+// Variables
+const importeCuenta = ref<number>(NaN);
+const comensales = ref<number>(1);
+const opcionSeleccionada = ref<number | null>(null);
+const rangoSeleccionadoValue = ref<number>(25);
 
 const radioButton1Value = "0";
 const radioButton2Value = "10";
 const radioButton3Value = "20";
 
-const opcionSeleccionada = ref<number | null>(null);
-const rangoSeleccionadoValue = ref(0);
+// Gestión de eventos
+const manejarInput = (event: IonInputCustomEvent<InputInputEventDetail>) => {
 
+  const valorInput = parseInt(event.detail.value || '', 10);
+  importeCuenta.value = isNaN(valorInput) ? NaN : valorInput;
+
+  console.log('Input event. Valor: ' + importeCuenta.value);
+}
+
+// Propiedades computadas
 const propina = computed(() => {
   if (opcionSeleccionada.value === null) {
     return 0;
@@ -153,6 +159,7 @@ const importeTotal = computed(() => {
   }
 });
 
+// Watchers
 watch(rangoSeleccionadoValue, () => {
   opcionSeleccionada.value = rangoSeleccionadoValue.value;
 });
