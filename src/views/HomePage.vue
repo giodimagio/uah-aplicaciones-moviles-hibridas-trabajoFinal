@@ -10,10 +10,11 @@
         <ion-row class="ion-justify-content-center">
           <ion-col size-xs="10" size-sm="5" class="ion-margin-top">
             <ion-input ref="inputImporte" :clear-input="true" error-text="Importe incorrecto. Introduce uno válido"
-              fill="outline" helper-text="*Importe total de la cuenta" inputmode="decimal" label="Importe"
-              label-placement="stacked" pattern="^\d+(\.\d{1,2})?$"
+              fill="outline" helper-text="*Importe total de la cuenta" inputmode="numeric" label="Importe"
+              label-placement="stacked" pattern="^(?!0\d)\d+(\.\d{1,2})?$"
               pattern-error-text="Importe incorrecto. Introduce uno válido" placeholder="Introduce un importe válido"
-              type="number" :required="true" :value="importeCuenta" @ionInput="manejarInput">
+              type="number" :required="true" :value="importeCuenta" @ionInput="manejarImporteInput"
+              @ionBlur="manejarBlur">
             </ion-input>
           </ion-col>
           <ion-col size-xs="10" size-sm="5" class="ion-margin-top">
@@ -21,7 +22,7 @@
               error-text="Nº comensales incorrecto. Introduce uno válido" fill="outline"
               helper-text="*Número de personas a pagar la cuenta" inputmode="numeric" label="Nº Comensales"
               label-placement="stacked" placeholder="Introduce un número de personas válido" :required="true"
-              type="number" v-model="comensales">
+              type="number" :value="comensales" @ionInput="manejarComensalesInput" @ionBlur="manejarBlur">
             </ion-input>
           </ion-col>
         </ion-row>
@@ -114,25 +115,66 @@ const importeCuenta = ref<number>(NaN);
 const comensales = ref<number>(1);
 const opcionSeleccionada = ref<number | null>(null);
 const rangoSeleccionadoValue = ref<number>(25);
+const regexImporte: RegExp = /^(?!0\d)\d+(\.\d{1,2})?$/;
+const regexComensales: RegExp = /^[1-9]\d*$/;
 
 const radioButton1Value = "0";
 const radioButton2Value = "10";
 const radioButton3Value = "20";
 
 // Gestión de eventos
-const manejarInput = (event: IonInputCustomEvent<InputInputEventDetail>) => {
+const manejarImporteInput = (event: IonInputCustomEvent<InputInputEventDetail>) => {
 
-  const valorInput = parseInt(event.detail.value || '', 10);
-  importeCuenta.value = isNaN(valorInput) ? NaN : valorInput;
+  const valorImporteInput = parseFloat(event.detail.value || '');
+  importeCuenta.value = isNaN(valorImporteInput) ? 0 : valorImporteInput;
 
-  console.log('Input event. Valor: ' + importeCuenta.value);
+  // Remove error classes
+  event.target.classList.remove("ion-valid");
+  event.target.classList.remove("ion-invalid");
+
+  // Check if the value matches the pattern
+  if (!regexImporte.test(valorImporteInput.toString())) {
+    event.target.classList.add("ion-invalid");
+    console.log("Input: " + valorImporteInput.toString() + " es un importe INVÁLIDO");
+  } else {
+    event.target.classList.add("ion-valid");
+    console.log("Input: " + valorImporteInput.toString() + " es un importe VÁLIDO");
+  }
+
+  console.log("Evento Input: importeCuenta = " + importeCuenta.value);
 }
+
+const manejarComensalesInput = (event: IonInputCustomEvent<InputInputEventDetail>) => {
+
+  const valorComensalesInput = parseInt(event.detail.value || '', 10);
+  comensales.value = isNaN(valorComensalesInput) ? 0 : valorComensalesInput;
+
+  // Remove error classes
+  event.target.classList.remove("ion-valid");
+  event.target.classList.remove("ion-invalid");
+
+  // Check if the value matches the pattern
+  if (!regexComensales.test(valorComensalesInput.toString())) {
+    event.target.classList.add("ion-invalid");
+    console.log("Input comensales es INVALIDO");
+  } else {
+    event.target.classList.add("ion-valid");
+    console.log("Input comensales es VALIDO");
+  }
+
+  console.log("Evento Input: comensales = " + comensales.value);
+}
+
+const manejarBlur = (event: IonInputCustomEvent<FocusEvent>) => {
+  event.target.classList.add("ion-touched");
+  console.log("Blur event");
+};
 
 // Propiedades computadas
 const propina = computed(() => {
-  if (opcionSeleccionada.value === null) {
+  if (opcionSeleccionada.value === null || undefined) {
     return 0;
-  } else if (typeof opcionSeleccionada.value === 'number') {
+  } else if (typeof opcionSeleccionada.value === "number") {
     return (importeCuenta.value * (opcionSeleccionada.value / 100));
   } else {
     return (importeCuenta.value * (parseInt(opcionSeleccionada.value) / 100));
@@ -140,9 +182,9 @@ const propina = computed(() => {
 });
 
 const importePersona = computed(() => {
-  if (comensales.value === null || 0) {
-    return 0;
-  } else if (typeof importeCuenta.value === 'number') {
+  if (isNaN(comensales.value)) {
+    return 1;
+  } else if (typeof importeCuenta.value === "number") {
     return ((importeCuenta.value + propina.value) / comensales.value);
   } else {
     return ((parseInt(importeCuenta.value) + propina.value) / comensales.value);
@@ -150,9 +192,10 @@ const importePersona = computed(() => {
 });
 
 const importeTotal = computed(() => {
-  if (importeCuenta.value === null || 0) {
+  //if (importeCuenta.value === null || 0 || NaN || undefined) {
+  if (isNaN(importeCuenta.value)) {
     return 0;
-  } else if (typeof importeCuenta.value === 'number') {
+  } else if (typeof importeCuenta.value === "number") {
     return (importeCuenta.value + propina.value);
   } else {
     return (parseInt(importeCuenta.value) + propina.value);
