@@ -13,8 +13,8 @@
               fill="outline" helper-text="*Importe total de la cuenta" inputmode="numeric" label="Importe"
               label-placement="stacked" pattern="^(?!0\d)\d+(\.\d{1,2})?$"
               pattern-error-text="Importe incorrecto. Introduce uno válido" placeholder="Introduce un importe válido"
-              type="number" :required="true" :value="importeCuenta" @ionInput="manejarImporteInput"
-              @ionBlur="manejarBlur">
+              type="number" :required="true" :value="importeCuenta" @ionInput="manejarImporteInput" @ionBlur="manejarBlur"
+              @ionFocus="manejarFoco">
             </ion-input>
           </ion-col>
           <ion-col size-xs="10" size-sm="5" class="ion-margin-top">
@@ -22,7 +22,8 @@
               error-text="Nº comensales incorrecto. Introduce uno válido" fill="outline"
               helper-text="*Número de personas a pagar la cuenta" inputmode="numeric" label="Nº Comensales"
               label-placement="stacked" placeholder="Introduce un número de personas válido" :required="true"
-              type="number" :value="comensales" @ionInput="manejarComensalesInput" @ionBlur="manejarBlur">
+              type="number" :value="comensales" @ionInput="manejarComensalesInput" @ionBlur="manejarBlur"
+              @ionFocus="manejarFoco">
             </ion-input>
           </ion-col>
         </ion-row>
@@ -93,11 +94,10 @@
       </ion-grid>
     </ion-content>
     <ion-footer>
-      <ion-toolbar>
-        <ion-title class="ion-text-center">Ionic - Trabajo Final - Aplicaciones móviles (Híbridas) - UAH</ion-title>
-      </ion-toolbar>
-      <ion-toolbar>
-        <ion-title class="ion-text-center">Jorge Romero - jorge.romeroc@edu.uah.es</ion-title>
+      <ion-toolbar :color="colorToolbar">
+        <ion-title size="small" class="ion-text-center">Ionic - Trabajo Final - Aplicaciones móviles (Híbridas) - UAH |
+          Jorge Romero -
+          jorge.romeroc@edu.uah.es</ion-title>
       </ion-toolbar>
     </ion-footer>
   </ion-page>
@@ -116,12 +116,19 @@ const opcionSeleccionada: Ref<number | null> = ref(null);
 const rangoSeleccionadoValue: Ref<number> = ref(25);
 const regexImporte: RegExp = /^(?!0\d)\d+(\.\d{1,2})?$/;
 const regexComensales: RegExp = /^[1-9]\d*$/;
+const colorToolbar: Ref<string> = ref("tertiary");
+const hasImporteValidClass: Ref<boolean> = ref(false);
+const hasImporteInvalidClass: Ref<boolean> = ref(false);
+const hasComensalesValidClass: Ref<boolean> = ref(false);
+const hasComensalesInvalidClass: Ref<boolean> = ref(false);
 
 const radioButton1Value: string = "0";
 const radioButton2Value: string = "10";
 const radioButton3Value: string = "20";
 
 // Gestión de eventos
+
+// Función para manejar el evento de input de importeCuenta
 const manejarImporteInput = (event: IonInputCustomEvent<InputInputEventDetail>): void => {
 
   const valorImporteInput = parseFloat(event.detail.value || '');
@@ -132,15 +139,17 @@ const manejarImporteInput = (event: IonInputCustomEvent<InputInputEventDetail>):
 
   if (!regexImporte.test(valorImporteInput.toString())) {
     event.target.classList.add("ion-invalid");
-    console.log("Input: " + valorImporteInput.toString() + " es un importe INVÁLIDO");
+    console.log("[Evento][Input]: " + event.type + " - " + "Importe introducido = " + event.detail.value + ". Es un importe INVÁLIDO");
   } else {
     event.target.classList.add("ion-valid");
-    console.log("Input: " + valorImporteInput.toString() + " es un importe VÁLIDO");
+    console.log("[Evento][Input]: " + event.type + " - " + "Importe introducido = " + event.detail.value + ". Es un importe VÁLIDO");
   }
 
-  console.log("Evento Input: importeCuenta = " + importeCuenta.value);
+  hasImporteValidClass.value = event.target.classList.contains('ion-valid');
+  hasImporteInvalidClass.value = event.target.classList.contains('ion-invalid');
 }
 
+// Función para manejar el evento de input de comensales
 const manejarComensalesInput = (event: IonInputCustomEvent<InputInputEventDetail>): void => {
 
   const valorComensalesInput = parseFloat(event.detail.value || '');
@@ -151,18 +160,26 @@ const manejarComensalesInput = (event: IonInputCustomEvent<InputInputEventDetail
 
   if (!regexComensales.test(valorComensalesInput.toString())) {
     event.target.classList.add("ion-invalid");
-    console.log("Input: " + valorComensalesInput.toString() + " es un importe INVÁLIDO");
+    console.log("[Evento][Input]: " + event.type + " - " + "Comensales introducidos = " + event.detail.value + ". Es un importe INVÁLIDO");
   } else {
     event.target.classList.add("ion-valid");
-    console.log("Input: " + valorComensalesInput.toString() + " es un importe VÁLIDO");
+    console.log("[Evento][Input]: " + event.type + " - " + "Comensales introducidos = " + event.detail.value + ". Es un importe VÁLIDO");
   }
 
-  console.log("Evento Input: comensales = " + comensales.value);
+  hasComensalesValidClass.value = event.target.classList.contains('ion-valid');
+  hasComensalesInvalidClass.value = event.target.classList.contains('ion-invalid');
 }
 
-const manejarBlur = (event: IonInputCustomEvent<FocusEvent>): void => {
+// Función para manejar el evento de foco
+const manejarFoco = (event: IonInputCustomEvent<FocusEvent>): void => {
+  console.log("[Evento][Foco][Hacer foco]: " + event.type);
   event.target.classList.add("ion-touched");
-  console.log("Evento volver del foco");
+};
+
+// Función para manejamos el evento de devolver el foco
+const manejarBlur = (event: IonInputCustomEvent<FocusEvent>): void => {
+  console.log("[Evento][Foco][Deshacer foco]: " + event.type);
+  event.target.classList.add("ion-untouched");
 };
 
 // Propiedades computadas
@@ -198,7 +215,25 @@ const importeTotal = computed(() => {
   }
 });
 
-// Watchers
+// Watchers para observar variables y realizar acciones
+
+// Observamos el valor de las clases de los inputs y cambiamos el color del footer en consecuencia
+watch([hasImporteValidClass, hasImporteInvalidClass, hasComensalesValidClass, hasComensalesInvalidClass], () => {
+  if (hasImporteValidClass.value && hasComensalesValidClass.value) {
+    colorToolbar.value = 'success';
+  } else if (hasImporteInvalidClass.value || hasComensalesInvalidClass.value) {
+    colorToolbar.value = 'danger';
+  } else {
+    colorToolbar.value = 'tertiary';
+  }
+  console.log("[Watcher]:" +
+    " hasImporteValidClass = " + hasImporteValidClass.value +
+    " | hasImporteInvalidClass = " + hasImporteInvalidClass.value +
+    " | hasComensalesValidClass = " + hasComensalesValidClass.value +
+    " | hasComensalesInvalidClass = " + hasComensalesInvalidClass.value);
+});
+
+// Observamos el valor del rango seleccionado y lo asignamos a la opción seleccionada
 watch(rangoSeleccionadoValue, () => {
   opcionSeleccionada.value = rangoSeleccionadoValue.value;
 });
