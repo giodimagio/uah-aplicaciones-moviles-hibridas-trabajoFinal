@@ -40,21 +40,21 @@
                   <ion-item>
                     <ion-radio id="radioButton1" color="danger" justify="start" label-placement="end"
                       :value="radioButton1Value">{{ radioButton1Value }} %</ion-radio>
-                    <ion-icon :icon="sadOutline" size="large"></ion-icon>
+                    <ion-icon :icon="sadOutline" size="large" color="danger"></ion-icon>
                   </ion-item>
                 </ion-col>
                 <ion-col size-xs="12" size-sm="4">
                   <ion-item>
                     <ion-radio id="radioButton2" color="warning" justify="start" label-placement="end"
                       :value="radioButton2Value">{{ radioButton2Value }} %</ion-radio>
-                    <ion-icon :icon="happySharp" size="large"></ion-icon>
+                    <ion-icon :icon="happySharp" size="large" color="warning"></ion-icon>
                   </ion-item>
                 </ion-col>
                 <ion-col size-xs="12" size-sm="4">
                   <ion-item>
                     <ion-radio id="radioButton3" color="success" justify="start" label-placement="end"
                       :value="radioButton3Value">{{ radioButton3Value }} %</ion-radio>
-                    <ion-icon :icon="happyOutline" size="large"></ion-icon>
+                    <ion-icon :icon="happyOutline" size="large" color="success"></ion-icon>
                   </ion-item>
                 </ion-col>
                 <ion-col size-xs="12" size-sm="6">
@@ -75,17 +75,17 @@
             <ion-row>
               <ion-col size-xs="12" size-md="4">
                 <ion-item>
-                  <h3><ion-text color="danger">Propina</ion-text>: {{ propina.toFixed(2) }} €</h3>
+                  <h3><ion-text :color="colorCambio">Propina</ion-text>: {{ propina.toFixed(2) }} €</h3>
                 </ion-item>
               </ion-col>
               <ion-col size-xs="12" size-md="4">
                 <ion-item>
-                  <h3><ion-text color="danger">Por persona</ion-text>: {{ importePersona.toFixed(2) }} €</h3>
+                  <h3><ion-text :color="colorCambio">Por persona</ion-text>: {{ importePersona.toFixed(2) }} €</h3>
                 </ion-item>
               </ion-col>
               <ion-col size-xs="12" size-md="4">
                 <ion-item>
-                  <h3><ion-text color="danger">Total</ion-text>: {{ importeTotal.toFixed(2) }} €</h3>
+                  <h3><ion-text :color="colorCambio">Total</ion-text>: {{ importeTotal.toFixed(2) }} €</h3>
                 </ion-item>
               </ion-col>
             </ion-row>
@@ -94,7 +94,7 @@
       </ion-grid>
     </ion-content>
     <ion-footer>
-      <ion-toolbar :color="colorToolbar">
+      <ion-toolbar :color="colorCambio">
         <ion-title size="small" class="ion-text-center">Ionic - Trabajo Final - Aplicaciones móviles (Híbridas) - UAH |
           Jorge Romero -
           jorge.romeroc@edu.uah.es</ion-title>
@@ -104,19 +104,22 @@
 </template>
 
 <script setup lang="ts">
-import { IonCol, IonContent, IonFooter, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonPage, IonRadio, IonRadioGroup, IonRange, IonRow, IonText, IonTitle, IonToolbar, } from '@ionic/vue';
+import { IonCol, IonContent, IonFooter, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonPage, IonRadio, IonRadioGroup, IonRange, IonRow, IonText, IonTitle, IonToolbar } from '@ionic/vue';
 import { IonInputCustomEvent, InputInputEventDetail } from '@ionic/core';
 import { happyOutline, happySharp, sadOutline } from 'ionicons/icons';
 import { Ref, ref, watch, computed } from 'vue';
 
-// Variables
+/********************************
+ * Variables
+ ********************************/
+
 const importeCuenta: Ref<number> = ref(NaN);
 const comensales: Ref<number> = ref(1);
 const opcionSeleccionada: Ref<number | null> = ref(null);
 const rangoSeleccionadoValue: Ref<number> = ref(25);
 const regexImporte: RegExp = /^(?!0\d)\d+(\.\d{1,2})?$/;
 const regexComensales: RegExp = /^[1-9]\d*$/;
-const colorToolbar: Ref<string> = ref("tertiary");
+const colorCambio: Ref<string> = ref("tertiary");
 const hasImporteValidClass: Ref<boolean> = ref(false);
 const hasImporteInvalidClass: Ref<boolean> = ref(false);
 const hasComensalesValidClass: Ref<boolean> = ref(false);
@@ -126,114 +129,152 @@ const radioButton1Value: string = "0";
 const radioButton2Value: string = "10";
 const radioButton3Value: string = "20";
 
-// Gestión de eventos
+/********************************
+ * Gestión de eventos
+ ********************************/
 
-// Función para manejar el evento de input de importeCuenta
+/**
+ * Función para manejar el evento de input de importeCuenta
+ *
+ * @param {IonInputCustomEvent<InputInputEventDetail>} event - Evento de input.
+ * @returns {void}
+ */
 const manejarImporteInput = (event: IonInputCustomEvent<InputInputEventDetail>): void => {
 
   const valorImporteInput = parseFloat(event.detail.value || '');
   importeCuenta.value = isNaN(valorImporteInput) ? 0 : valorImporteInput;
 
-  event.target.classList.remove("ion-valid");
-  event.target.classList.remove("ion-invalid");
+  event.target.classList.remove("ion-valid", "ion-invalid");
 
   if (!regexImporte.test(valorImporteInput.toString())) {
     event.target.classList.add("ion-invalid");
-    console.log("[Evento][Input]: " + event.type + " - " + "Importe introducido = " + event.detail.value + ". Es un importe INVÁLIDO");
+    console.log(`[Evento][Input]: ${event.type} - Importe introducido = ${event.detail.value} | Es un importe INVÁLIDO`);
   } else {
     event.target.classList.add("ion-valid");
-    console.log("[Evento][Input]: " + event.type + " - " + "Importe introducido = " + event.detail.value + ". Es un importe VÁLIDO");
+    console.log(`[Evento][Input]: ${event.type} - Importe introducido = ${event.detail.value} | Es un importe VÁLIDO`);
   }
 
   hasImporteValidClass.value = event.target.classList.contains('ion-valid');
   hasImporteInvalidClass.value = event.target.classList.contains('ion-invalid');
 }
 
-// Función para manejar el evento de input de comensales
+/**
+ * Función para manejar el evento de input de comensales
+ *
+ * @param {IonInputCustomEvent<InputInputEventDetail>} event - Evento de input.
+ * @returns {void}
+ */
 const manejarComensalesInput = (event: IonInputCustomEvent<InputInputEventDetail>): void => {
 
   const valorComensalesInput = parseFloat(event.detail.value || '');
   comensales.value = isNaN(valorComensalesInput) ? 0 : valorComensalesInput;
 
-  event.target.classList.remove("ion-valid");
-  event.target.classList.remove("ion-invalid");
+  event.target.classList.remove("ion-valid", "ion-invalid");
 
   if (!regexComensales.test(valorComensalesInput.toString())) {
     event.target.classList.add("ion-invalid");
-    console.log("[Evento][Input]: " + event.type + " - " + "Comensales introducidos = " + event.detail.value + ". Es un importe INVÁLIDO");
+    console.log(`[Evento][Input]: ${event.type} - Comensales introducidos = ${event.detail.value} | Es un importe INVÁLIDO`);
   } else {
     event.target.classList.add("ion-valid");
-    console.log("[Evento][Input]: " + event.type + " - " + "Comensales introducidos = " + event.detail.value + ". Es un importe VÁLIDO");
+    console.log(`[Evento][Input]: ${event.type} - Comensales introducidos = ${event.detail.value} | Es un importe VÁLIDO`);
   }
 
   hasComensalesValidClass.value = event.target.classList.contains('ion-valid');
   hasComensalesInvalidClass.value = event.target.classList.contains('ion-invalid');
 }
 
-// Función para manejar el evento de foco
+/**
+ * Función para manejar el evento de hacer foco
+ *
+ * @param {IonInputCustomEvent<FocusEvent>} event - Evento de foco.
+ * @returns {void}
+ */
 const manejarFoco = (event: IonInputCustomEvent<FocusEvent>): void => {
   console.log("[Evento][Foco][Hacer foco]: " + event.type);
   event.target.classList.add("ion-touched");
 };
 
-// Función para manejamos el evento de devolver el foco
+/**
+ * Función para manejar el evento de devolver el foco
+ *
+ * @param {IonInputCustomEvent<FocusEvent>} event - Evento de blur.
+ * @returns {void}
+ */
 const manejarBlur = (event: IonInputCustomEvent<FocusEvent>): void => {
-  console.log("[Evento][Foco][Deshacer foco]: " + event.type);
+  console.log("[Evento][Foco][Devolver foco]: " + event.type);
   event.target.classList.add("ion-untouched");
 };
 
-// Propiedades computadas
+/********************************
+ * Propiedades computadas
+ ********************************/
+
+/**
+ * Calcula la propina.
+ */
 const propina = computed(() => {
   if (typeof opcionSeleccionada.value === "number") {
-    return (importeCuenta.value * (opcionSeleccionada.value / 100));
+    return importeCuenta.value * (opcionSeleccionada.value / 100);
   } else if (typeof opcionSeleccionada.value === "string" && !isNaN(importeCuenta.value)) {
-    return (importeCuenta.value * (parseFloat(opcionSeleccionada.value) / 100));
+    return importeCuenta.value * (parseFloat(opcionSeleccionada.value) / 100);
   } else {
     return 0;
   }
 });
 
+/**
+ * Calcula el importe por persona.
+ */
 const importePersona = computed(() => {
   if (isNaN(importeCuenta.value) || isNaN(comensales.value)) {
     return 0;
   } else if (typeof importeCuenta.value === "number") {
-    return ((importeCuenta.value + propina.value) / comensales.value);
+    return (importeCuenta.value + propina.value) / comensales.value;
   } else if (typeof importeCuenta.value === "string") {
-    return ((parseFloat(importeCuenta.value) + propina.value) / comensales.value);
+    return (parseFloat(importeCuenta.value) + propina.value) / comensales.value;
   } else {
     return 0;
   }
 });
 
+/**
+ * Calcula el importe total.
+ */
 const importeTotal = computed(() => {
   if (isNaN(importeCuenta.value)) {
     return 0;
   } else if (typeof importeCuenta.value === "number") {
-    return (importeCuenta.value + propina.value);
+    return importeCuenta.value + propina.value;
   } else {
-    return (parseFloat(importeCuenta.value) + propina.value);
+    return parseFloat(importeCuenta.value) + propina.value;
   }
 });
 
-// Watchers para observar variables y realizar acciones
+/********************************
+ * Watchers
+ ********************************/
 
-// Observamos el valor de las clases de los inputs y cambiamos el color del footer en consecuencia
+/**
+ * Observa el valor de las clases de los inputs y cambia el color del footer en consecuencia
+ */
 watch([hasImporteValidClass, hasImporteInvalidClass, hasComensalesValidClass, hasComensalesInvalidClass], () => {
   if (hasImporteValidClass.value && hasComensalesValidClass.value) {
-    colorToolbar.value = 'success';
+    colorCambio.value = 'success';
   } else if (hasImporteInvalidClass.value || hasComensalesInvalidClass.value) {
-    colorToolbar.value = 'danger';
+    colorCambio.value = 'danger';
   } else {
-    colorToolbar.value = 'tertiary';
+    colorCambio.value = 'tertiary';
   }
   console.log("[Watcher]:" +
-    " hasImporteValidClass = " + hasImporteValidClass.value +
-    " | hasImporteInvalidClass = " + hasImporteInvalidClass.value +
-    " | hasComensalesValidClass = " + hasComensalesValidClass.value +
-    " | hasComensalesInvalidClass = " + hasComensalesInvalidClass.value);
+    ` hasImporteValidClass = ${hasImporteValidClass.value}` +
+    ` | hasImporteInvalidClass = ${hasImporteInvalidClass.value}` +
+    ` | hasComensalesValidClass = ${hasComensalesValidClass.value}` +
+    ` | hasComensalesInvalidClass = ${hasComensalesInvalidClass.value}`);
 });
 
-// Observamos el valor del rango seleccionado y lo asignamos a la opción seleccionada
+/**
+ * Observa el valor del rango seleccionado y lo asigna a la opción seleccionada.
+ */
 watch(rangoSeleccionadoValue, () => {
   opcionSeleccionada.value = rangoSeleccionadoValue.value;
 });
