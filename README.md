@@ -1,38 +1,34 @@
 
 <h1 align="center">Máster Universitario en Desarrollo Ágil de Software para la Web</h1>
-<h3 align="center">Ionic - Trabajo Final</h3>
-<h5 align="center">
-    Aplicaciones Móviles (Híbridas)
-</p>
-<h6 align="center">
-    Universidad de Alcalá
-</h6>
+<h3 align="center">Ionic - Dividimos App</h3>
+<h5 align="center">Aplicaciones Móviles (Híbridas) - Trabajo Final</h5>
+<h6 align="center">Universidad de Alcalá</h6>
 <hr>
 
-<!-- ÍNIDICE -->
+<!-- ÍNDICE -->
 
 <details open="open">
   <summary>Índice</summary>
   <ol>
     <li>
-      <a href="#about-the-project">El proyecto</a>
+      <a href="#el-proyecto">El proyecto</a>
       <ul>
-        <li><a href="#built-with">Stack</a></li>
+        <li><a href="#stack">Stack</a></li>
       </ul>
     </li>
     <li>
-      <a href="#getting-started">Como empezar</a>
+      <a href="#como-empezar">Como empezar</a>
       <ul>
-        <li><a href="#prerequisites">Requisitos previos</a></li>
-        <li><a href="#installation">Instalación</a></li>
+        <li><a href="#requisitos-previos">Requisitos previos</a></li>
+        <li><a href="#instalación">Instalación</a></li>
       </ul>
     </li>
-    <li><a href="#license">Licenciamiento</a></li>
-    <li><a href="#contact">Contacto</a></li>
+    <li><a href="#licenciamiento">Licenciamiento</a></li>
+    <li><a href="#contacto">Contacto</a></li>
   </ol>
 </details>
 
-<!-- EL RPOYECTO -->
+<!-- EL PROYECTO -->
 
 ## El proyecto
 
@@ -76,7 +72,7 @@ Previamente, debemos tener instalado lo siguiente:
 
 ### Instalación
 
-1. Clonamos el repositorio desde VSCode con el cliente Git integrado o desde un terminal Bash, vía HTTPS o SSH. [GitHub]([https://github.com/giodimagio/uah-aplicaciones-moviles-hibridas-trabajoFinal.git)
+1. Clonamos el repositorio desde VSCode con el cliente Git integrado o desde un terminal Bash, vía HTTPS o SSH. [GitHub](https://github.com/giodimagio/uah-aplicaciones-moviles-hibridas-trabajoFinal)
 
 	HTTPS
    ```sh
@@ -91,6 +87,7 @@ Previamente, debemos tener instalado lo siguiente:
    cd uah-aplicaciones-moviles-hibridas-trabajoFinal
    ```
 3. Seguimos la secuencia de comandos del archivo [commands.sh](./commands.sh)
+4. Vite nos mostrará la URL de desarrollo en el navegador, la cual será del tipo http://localhost:4000/ donde el puerto puede variar.
 
 <!-- LICENCIAMIENTO -->
 
